@@ -7,6 +7,7 @@ import GUI from "lil-gui";
  */
 // Debug
 const gui = new GUI();
+gui.close();
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -26,8 +27,9 @@ parameters.branches = 3;
 parameters.spin = 3;
 parameters.randomness = 0.02;
 parameters.randomnessPower = 3;
-parameters.insideColor = "#ff0855";
+parameters.insideColor = "#270aff";
 parameters.outsideColor = "#01ff45";
+parameters.speedRotation = 0.05;
 
 // init
 let galaxyGeometry = null;
@@ -127,45 +129,48 @@ const generateGalaxy = () => {
 };
 
 generateGalaxy();
-
-gui
+const particlesFolder = gui.addFolder("Particles");
+particlesFolder
   .add(parameters, "count")
   .min(100)
   .max(1000000)
   .step(100)
   .onFinishChange(generateGalaxy);
-gui
+particlesFolder
   .add(parameters, "size")
   .min(0.01)
   .max(0.1)
   .step(0.001)
   .onFinishChange(generateGalaxy);
 
-gui
+const galaxyFolder = gui.addFolder("Galaxy");
+galaxyFolder
   .add(parameters, "radius")
   .min(0.01)
   .max(20)
   .step(0.01)
   .onFinishChange(generateGalaxy);
-gui
+galaxyFolder
   .add(parameters, "branches")
   .min(2)
   .max(20)
   .step(1)
   .onFinishChange(generateGalaxy);
-gui
+galaxyFolder
   .add(parameters, "spin")
   .min(-5)
   .max(5)
   .step(1)
   .onFinishChange(generateGalaxy);
-gui
+
+const randomnessFolder = gui.addFolder("Randomness");
+randomnessFolder
   .add(parameters, "randomness")
   .min(0)
   .max(2)
   .step(0.001)
   .onFinishChange(generateGalaxy);
-gui
+randomnessFolder
   .add(parameters, "randomnessPower")
   .min(1)
   .max(10)
@@ -178,6 +183,14 @@ colorsFolder
   .onFinishChange(generateGalaxy);
 colorsFolder
   .addColor(parameters, "outsideColor")
+  .onFinishChange(generateGalaxy);
+
+const animationFolder = gui.addFolder("Animation");
+animationFolder
+  .add(parameters, "speedRotation")
+  .min(-0.8)
+  .max(0.8)
+  .step(0.001)
   .onFinishChange(generateGalaxy);
 
 /**
@@ -237,6 +250,9 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  // update galaxy
+  points.rotation.y = -elapsedTime * parameters.speedRotation;
 
   // Update controls
   controls.update();
