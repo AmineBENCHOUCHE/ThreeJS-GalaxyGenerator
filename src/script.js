@@ -130,6 +130,7 @@ const generateGalaxy = () => {
 
 generateGalaxy();
 const particlesFolder = gui.addFolder("Particles");
+particlesFolder.close();
 particlesFolder
   .add(parameters, "count")
   .min(100)
@@ -144,6 +145,7 @@ particlesFolder
   .onFinishChange(generateGalaxy);
 
 const galaxyFolder = gui.addFolder("Galaxy");
+galaxyFolder.close();
 galaxyFolder
   .add(parameters, "radius")
   .min(0.01)
@@ -164,6 +166,7 @@ galaxyFolder
   .onFinishChange(generateGalaxy);
 
 const randomnessFolder = gui.addFolder("Randomness");
+randomnessFolder.close();
 randomnessFolder
   .add(parameters, "randomness")
   .min(0)
@@ -242,6 +245,28 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+/**
+ * Full screen
+ */
+window.addEventListener("dblclick", () => {
+  // console.log("double click");
+  const fullscreenElement =
+    document.fullscreenElement || document.webkitFullScreenElement;
+  if (!fullscreenElement) {
+    if (canvas.requestFullscreen) {
+      canvas.requestFullscreen();
+    } else if (canvas.webkitFullScreenElement) {
+      canvas.webkitRequestFullScreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+});
 
 /**
  * Animate
