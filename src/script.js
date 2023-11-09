@@ -80,24 +80,27 @@ const generateGalaxy = () => {
     const randomZ =
       Math.pow(Math.random(), parameters.randomnessPower) *
       (Math.random() < 0.5 ? 1 : -1);
-
+    // Basic randomness
     // const randomX = (Math.random() - 0.5) * parameters.randomness;
     // const randomY = (Math.random() - 0.5) * parameters.randomness;
     // const randomZ = (Math.random() - 0.5) * parameters.randomness;
 
-    if (i < 20) {
-      console.log(i, branchAngle);
-    }
+    // if (i < 20) {
+    //   console.log(i, branchAngle);
+    // }
     positions[i3] = radius * Math.cos(branchAngle + spinAngle) + randomX;
     positions[i3 + 1] = randomY * Math.random() * 2;
     positions[i3 + 2] = radius * Math.sin(branchAngle + spinAngle) + randomZ;
 
+    // Basic randomness
     // positions[i3 + 0] = (Math.random() - 0.5) * 50;
     // positions[i3 + 1] = (Math.random() - 0.5) * 50;
     // positions[i3 + 2] = (Math.random() - 0.5) * 50;
 
     // Colors
+    // we need to clone the original color
     const mixedColor = insideColor.clone();
+    // lerp fucntion make a perfect mix between two colors
     mixedColor.lerp(outsideColor, radius / parameters.radius);
     colors[i3] = mixedColor.r;
     colors[i3 + 1] = mixedColor.g;
@@ -107,8 +110,8 @@ const generateGalaxy = () => {
   galaxyGeometry.setAttribute(
     "position",
     new THREE.BufferAttribute(positions, 3)
-  ),
-    galaxyGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  );
+  galaxyGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   /**
    * Material
@@ -129,6 +132,11 @@ const generateGalaxy = () => {
 };
 
 generateGalaxy();
+
+/**
+ * GUI
+ */
+
 const particlesFolder = gui.addFolder("Particles");
 particlesFolder.close();
 particlesFolder
@@ -166,7 +174,7 @@ galaxyFolder
   .onFinishChange(generateGalaxy);
 
 const randomnessFolder = gui.addFolder("Randomness");
-randomnessFolder.close();
+randomnessFolder.close;
 randomnessFolder
   .add(parameters, "randomness")
   .min(0)
@@ -245,28 +253,6 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-/**
- * Full screen
- */
-window.addEventListener("dblclick", () => {
-  // console.log("double click");
-  const fullscreenElement =
-    document.fullscreenElement || document.webkitFullScreenElement;
-  if (!fullscreenElement) {
-    if (canvas.requestFullscreen) {
-      canvas.requestFullscreen();
-    } else if (canvas.webkitFullScreenElement) {
-      canvas.webkitRequestFullScreen();
-    }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  }
-});
 
 /**
  * Animate
